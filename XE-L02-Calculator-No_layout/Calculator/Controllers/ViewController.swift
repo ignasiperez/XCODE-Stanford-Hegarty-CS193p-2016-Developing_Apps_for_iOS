@@ -2,18 +2,16 @@
 //  ViewController.swift
 //  Calculator
 //
-//  Created by ignasiperez.com on 14/11/2020.
+//  Created by ignasiperez.com on 20/11/2020.
 //
 
 import UIKit
 
 class ViewController: UIViewController {
   
-  @IBOutlet private weak var displayLabel: UILabel!
-  
   private var brain = CalculatorBrain()
   
-  private var userIsInTheMiddleOfTyping = false
+  private var isInTheMiddleOfTyping: Bool = false
   
   private var displayValue: Double {
     get {
@@ -26,31 +24,35 @@ class ViewController: UIViewController {
   }
   
   
+  @IBOutlet private weak var displayLabel: UILabel!
+  
+  
   @IBAction private func digitTouched(_ sender: UIButton) {
-    print("\(#function)")
+    print("\n\nViewController - \(#function)")
     
     let digit = sender.currentTitle!
+    print(" - digit: \(digit)")
     
-    if userIsInTheMiddleOfTyping {
-      let textCurrentlyInDisplay = displayLabel.text!
-      displayLabel.text = textCurrentlyInDisplay + digit
-      
+    if isInTheMiddleOfTyping {
+      let textCurrentlyInDisplay = displayLabel.text
+      displayLabel.text = textCurrentlyInDisplay! + digit
     } else {
       displayLabel.text = digit
     }
     
-    userIsInTheMiddleOfTyping = true
+    isInTheMiddleOfTyping = true
   }
   
   
-  @IBAction private func performOperationTouched(_ sender: UIButton) {
-    if userIsInTheMiddleOfTyping {
+  @IBAction private func operationTouched(_ sender: UIButton) {
+    if isInTheMiddleOfTyping {
       brain.setOperand(operand: displayValue)
-      userIsInTheMiddleOfTyping = false
+      
+      isInTheMiddleOfTyping = false
     }
     
-    if let mathematicalSymbol = sender.currentTitle {
-      brain.performOperation(symbol: mathematicalSymbol)
+    if let mathSymbol = sender.currentTitle {
+      brain.performOperation(symbol: mathSymbol)
     }
     
     displayValue = brain.result
@@ -63,4 +65,5 @@ class ViewController: UIViewController {
   }
   
 }
+
 
